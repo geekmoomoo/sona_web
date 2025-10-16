@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sona Logo & Background</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@700&family=Inter:wght@300&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 기본 설정 --- */
+        body {
+            /* 로고가 잘 보이도록 임시 배경색과 중앙 정렬을 적용합니다 */
+            background-color: #0f172a;
+            color: #ffffff;
+            display: grid;
+            place-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Inter', sans-serif; /* 기본 폰트 */
+        }
+
+        /* --- 1. 그라데이션 배경 --- */
+        #weather-background {
+            position: fixed;
+            inset: 0; /* top, right, bottom, left를 0으로 설정 */
+            z-index: -1; /* 다른 콘텐츠 뒤로 보냅니다 */
+            
+            /* 그라데이션 애니메이션 설정 */
+            background-size: 400% 400%;
+            animation: weatherGradient 45s ease infinite;
+            transition: background 2s ease-in-out;
+        }
+        
+        /* 배경 위에 어두운 오버레이를 추가하여 텍스트 가독성을 높입니다 */
+        #weather-background::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, .25);
+        }
+
+        /* 그라데이션 움직임 키프레임 */
+        @keyframes weatherGradient {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- 2. 로고 스타일 --- */
+        .logo-wrapper {
+            text-align: center; /* 내부 요소들을 가운데 정렬합니다 */
+        }
+        
+        .logo-container {
+            /* 로고 레이아웃 */
+            display: inline-flex; /* 너비를 콘텐츠에 맞추고 정렬 속성을 사용 */
+            align-items: baseline;
+            gap: 0.5rem; /* 8px */
+            text-decoration: none;
+            color: #ffffff;
+        }
+
+        .logo-main {
+            font-family: 'Lora', serif; /* Sona 텍스트 전용 폰트 */
+            font-size: 1.875rem; /* 30px */
+            font-weight: 700;
+        }
+        
+        .logo-sub {
+            font-size: 1.125rem; /* 18px */
+            font-weight: 300;
+            letter-spacing: 0.05em; /* 글자 간격 넓게 */
+        }
+
+        /* --- 3. 'coming soon' 문구 스타일 (추가됨) --- */
+        .coming-soon {
+            display: block; /* 위쪽 여백(margin-top)을 적용하기 위해 block으로 변경 */
+            margin-top: 1rem; /* 16px, 로고와의 간격 */
+            font-weight: 300;
+            font-size: 1rem; /* 16px */
+            letter-spacing: 0.1em; /* 글자 간격을 더 넓게 */
+            opacity: 0.8; /* 살짝 투명하게 처리하여 부드러운 느낌을 줍니다 */
+        }
+    </style>
+</head>
+<body>
+    <div id="weather-background" aria-hidden="true"></div>
+
+    <div class="logo-wrapper">
+        <a href="#" class="logo-container">
+            <span class="logo-main">Sona</span>
+            <span class="logo-sub">for Business</span>
+        </a>
+    
+        <span class="coming-soon">coming soon</span>
+    </div>
+
+    <script>
+        // --- 1. 그라데이션 배경을 위한 스크립트 (파스텔 톤) ---
+        (function () {
+            const bg = document.getElementById('weather-background');
+            if (!bg) return;
+
+            // 시간에 따라 다른 그라데이션을 설정하는 함수
+            function setTimeBasedBackground() {
+                const h = new Date().getHours();
+                let gradientStyle = "";
+                
+                // 새벽 (4시 ~ 8시): 부드러운 회색빛 블루
+                if (h >= 4 && h < 8) gradientStyle = "linear-gradient(230deg, #606c88, #3f4c6b, #606c88, #59616e)";
+                // 오전 (8시 ~ 13시): 아주 연한 하늘색
+                else if (h < 13) gradientStyle = "linear-gradient(230deg, #d3e0f5, #e9f1f8, #f5f2eb, #fae9d7)";
+                // 오후 (13시 ~ 18시): 밝고 부드러운 파스텔
+                else if (h < 18) gradientStyle = "linear-gradient(230deg, #c1e8e9, #b3d5f2, #faead9, #fbe3c5)";
+                // 저녁/밤 (18시 ~ 24시): 톤 다운된 퍼플과 브라운
+                else if (h < 24) gradientStyle = "linear-gradient(230deg, #6d628d, #4b6a88, #9e766f, #8c5d58)";
+                // 깊은 밤 (0시 ~ 4시): 차분한 다크 블루
+                else gradientStyle = "linear-gradient(230deg, #2c3e50, #34495e, #485461, #606c88)";
+                
+                bg.style.background = gradientStyle;
+            }
+
+            // 페이지 로드 시 즉시 실행
+            setTimeBasedBackground();
+            // 5분마다 시간을 체크하여 배경 업데이트
+            setInterval(setTimeBasedBackground, 5 * 60 * 1000);
+        })();
+    </script>
+</body>
+</html>
